@@ -1,10 +1,10 @@
-import { Flex, Box, Center } from "@chakra-ui/react";
+import { Flex, Box, Center, useColorMode, Image } from "@chakra-ui/react";
 import { shaderMaterial, OrbitControls } from "@react-three/drei";
 import { Canvas, extend, useFrame, useLoader } from "@react-three/fiber";
 // import glsl from "babel-plugin-glsl/macro";
 import glsl from "glslify";
 import * as THREE from "three";
-import { useRef, useEffect, Suspense } from "react";
+import { useRef, useEffect, Suspense, useState } from "react";
 import { a } from "@react-spring/three";
 import gsap from "gsap";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
@@ -14,6 +14,7 @@ const LogoShaderMaterial = shaderMaterial(
     uTexture: new THREE.Texture(),
     uTime: 0,
     uDistortionMultiplier: 7.0,
+    mouse: new THREE.Vector2(-1, -1),
   },
   //Vertex shader
   glsl`
@@ -146,17 +147,18 @@ float snoise(vec3 v)
     uniform sampler2D uTexture;
     uniform float uTime;
     uniform float uDistortionMultiplier;
+    uniform vec2 mouse;
     varying vec2 vUv;
     void main() {  
         vUv = uv;
          vec3 texture = texture2D(uTexture, vUv).rgb;
-            vec3 distortion = vec3(position.x * 2., position.y, 1.) * curlNoise(vec3(
-            position.x  + uTime * 0.05, 
+            vec3 distortion = vec3(position.x , position.y, 1.) * curlNoise(vec3(
+            position.x  + uTime * 0.1, 
             position.y  + uTime*0.1,
-            (position.x * position.y)*0.02)) * (uDistortionMultiplier * 1.);
+            position.z + uTime*0.1)) * (uDistortionMultiplier * 1.);
             vec3 finalPos = position + distortion;
         // if(texture.r < 0.1 && texture.g < 0.1 && texture.b < 0.1) finalPos = position;
-
+        // finalPos.xy = smoothstep(position.xy, mouse, mouse * 1.5);
         gl_PointSize = 3.;
         
         vec4 modelViewPosition = modelViewMatrix * vec4(finalPos, 1.0);
@@ -182,12 +184,23 @@ float snoise(vec3 v)
 );
 extend({ LogoShaderMaterial });
 const LogoAnimation = () => {
-  const ref = useRef<any>(null!);
+  // const ref = useRef<any>(null!);
+  const ref = useRef();
   useFrame(({ clock }) => {
     const elapsed = clock.getElapsedTime();
     ref.current.uTime = elapsed;
   });
   useEffect(() => {
+    setDistortion(window.innerWidth <= 1024 ? 0.05 : 0.02);
+    window.addEventListener("mousemove", (e) => {
+      setMouse(new THREE.Vector2(e.clientX, e.clientY));
+      if (ref.current) {
+        ref.current.mouse = new THREE.Vector2(
+          e.clientX - window.innerWidth / 2,
+          window.innerHeight / 2 - e.clientY
+        );
+      }
+    });
     const t1 = gsap.timeline();
     t1.fromTo(
       ref.current,
@@ -201,12 +214,15 @@ const LogoAnimation = () => {
     });
   }, []);
   const [image] = useLoader(THREE.TextureLoader, ["planet3.jpg"]);
+  const { colorMode, toggleColorMode } = useColorMode();
+  const [distortion, setDistortion] = useState(0.02);
+  const [mouse, setMouse] = useState(new THREE.Vector2(0, 0));
 
   return (
     <>
       <a.points>
         <planeBufferGeometry
-          args={[(1920 / 1823) * 20, 20, 1920 / 2.5, 1823 / 2.5]}
+          args={[(1920 / 1823) * 30, 30, 600, 600]}
           attach="geometry"
         />
         <logoShaderMaterial attach="material" uTexture={image} ref={ref} />
@@ -215,48 +231,32 @@ const LogoAnimation = () => {
   );
 };
 const InfoSectionAnimation = () => {
+  const cameraPosition = new THREE.Vector3(0, 0, 600);
+  useEffect(() => {
+    console.log(window.innerHeight);
+  });
+  const fov = Math.atan(1080 / 2 / cameraPosition.z) * 2;
+  console.log(fov);
   return (
     <>
-      {/* // <Flex
-    //   flex={1}
-    //   zIndex={-100}
-    //   // display={{ base: "none", lg: "flex" }}
-    //   position={"absolute"}
-    //   width={"100%"}
-    //   insetY={0}
-    //   right={0}
-    // > */}
-      {/* <Flex
-        bgGradient={"linear(to-r, gray.800 10%, transparent)"}
-        w={"full"}
-        h={"full"}
-      /> */}
-      <Center
-        h="100%"
-        w="100%"
-        position="fixed"
-        top={0}
-        left={0}
-        zIndex={-100}
-        // pt={20}
-        // pb={20}
-      >
-        <Box h="100%" w="100%">
-          <Canvas mode="concurrent">
-            <EffectComposer>
-              <Bloom
-                luminanceThreshold={0}
-                luminanceSmoothing={0.1}
-                height={300}
-              />
-            </EffectComposer>
-            <Suspense fallback={null}>
-              <LogoAnimation />
-            </Suspense>
-            {/* <OrbitControls enablePan={true} enableZoom={true} /> */}
-          </Canvas>
-        </Box>
-      </Center>
+      <Box w="100%" zIndex={-100}>
+        <Canvas
+          mode="concurrent"
+          camera={{ position: cameraPosition, fov: fov }}
+        >
+          <EffectComposer>
+            <Bloom
+              luminanceThreshold={0}
+              luminanceSmoothing={0.1}
+              height={300}
+            />
+          </EffectComposer>
+          <Suspense fallback={null}>
+            <LogoAnimation />
+          </Suspense>
+          {/* <OrbitControls enablePan={true} enableZoom={true} /> */}
+        </Canvas>
+      </Box>
     </>
   );
 };

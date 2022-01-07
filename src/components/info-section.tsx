@@ -15,94 +15,83 @@ import {
 } from "@chakra-ui/react";
 import InfoSectionAnimation from "./info-section-animation";
 import ProjectBox from "./projectCard";
-const InfoSection = () => {
+const StatsGridWithImage = () => {
   return (
-    <>
-      <Box h="100%" w="100%" position="relative">
-        <Box display={{ md: "flex" }}>
-          <Box flexGrow={1}>
-            <Heading>Jan Hoppel</Heading>
-            <Text>Software developer & creative coder</Text>
-          </Box>
-          <Box
-            flexShrink={0}
-            mt={{ base: 4, md: 0 }}
-            ml={{ md: 6 }}
-            textAlign="center"
-          >
-            <Image
-              borderColor="whiteAlpha.800"
-              borderWidth={2}
-              borderStyle="solid"
-              maxWidth="100px"
-              display="inline-block"
-              borderRadius="full"
-              src="/img/hoppel.jpg"
-              alt="Profile image"
-            />
-          </Box>
-        </Box>
-        <AboutMeSection />
-        <WorkInfoSection />
-        <CurrentProjects />
-      </Box>
-    </>
-  );
-};
-const AboutMeSection = () => {
-  return (
-    <>
+    <Box w="100vw" h="100vh" id="help">
       <Box
-        // bg={useColorModeValue("white", "gray.800")}
+        bg={"gray.800"}
         position={"relative"}
-        pt={0}
+        bgGradient={"linear(to-b, gray.800 50%  , transparent)"}
+        id="orsch"
+        w="100%"
+        h="100%"
       >
-        <Container maxW={"7xl"} zIndex={10} position={"relative"}>
-          <Box>
-            <VStack>
-              <Stack
-                color={useColorModeValue("white", "gray.800")}
-                justify={{ lg: "center" }}
-                pb={{ base: 4 }}
-              >
-                <Box>
-                  <Text
-                    fontFamily={"heading"}
-                    fontWeight={700}
-                    textTransform={"uppercase"}
-                    mb={3}
-                    fontSize={"md"}
-                    color={"gray.500"}
-                  >
-                    Who am I?
-                  </Text>
-                  <Text
-                    fontSize={"xl"}
-                    color={useColorModeValue("gray.800", "white")}
-                  >
-                    I'm a 19-year-old software developer usually developing
-                    full-stack applications, however I do enjoy creative coding
-                    as well!
-                  </Text>
-                  <Text
-                    fontSize={"xl"}
-                    color={useColorModeValue("gray.800", "white")}
-                    pt={6}
-                  >
-                    While usually working on full-stack applications with
-                    Angular, Node.js + Express and MongoDB, I tend to write my
-                    creative coding projects in React.
-                  </Text>
-                </Box>
-              </Stack>
-              {/* <Flex flex={1} /> */}
-            </VStack>
-          </Box>
+        <Flex
+          flex={1}
+          zIndex={0}
+          display={{ base: "none", lg: "flex" }}
+          // backgroundImage="planet3.jpg"
+          backgroundSize={"cover"}
+          backgroundPosition="center"
+          backgroundRepeat="no-repeat"
+          position={"absolute"}
+          width={"70%"}
+          insetY={0}
+          right={0}
+        >
+          {/* <Box w="full" h="full"> */}
+          {/* </Box> */}
+          <Flex
+            bgGradient={"linear(to-r, gray.800 , transparent)"}
+            w={"full"}
+            h={"full"}
+          >
+            <InfoSectionAnimation />
+          </Flex>
+        </Flex>
+        <Container maxW={"7xl"} zIndex={10} position={"relative"} pt={16}>
+          <Stack direction={{ base: "column", lg: "row" }}>
+            <Stack
+              flex={1}
+              color={"gray.400"}
+              justify={{ lg: "center" }}
+              pt={{ base: 4, md: 20, xl: 60 }}
+            >
+              <Box mb={{ base: 8, md: 20 }}>
+                <Text
+                  fontFamily={"heading"}
+                  fontWeight={700}
+                  textTransform={"uppercase"}
+                  mb={3}
+                  fontSize={"xl"}
+                  color={"gray.500"}
+                >
+                  My name is Jan.
+                </Text>
+                <Heading
+                  color={"white"}
+                  mb={5}
+                  fontSize={{ base: "3xl", md: "7xl" }}
+                >
+                  I write code.
+                </Heading>
+                <Text fontSize={"xl"} color={"gray.400"}>
+                  I&#39;m a 19-year-old software developer interested in
+                  developing full-stack applications. Additionally, I spend way
+                  too much time in the gym as well as experimenting with shaders
+                  and 3D-stuff.
+                </Text>
+              </Box>
+            </Stack>
+            <Flex flex={1} />
+          </Stack>
+          {/* <WorkInfoSection /> */}
         </Container>
       </Box>
-    </>
+    </Box>
   );
 };
+
 const WorkInfoSection = () => {
   return (
     <>
@@ -125,7 +114,7 @@ const WorkInfoSection = () => {
                     fontSize={"md"}
                     color={"gray.500"}
                   >
-                    Bio
+                    Latest projects
                   </Text>
                   <Text
                     fontSize={"xl"}
@@ -157,9 +146,9 @@ const CurrentProjects = () => {
         <Box position={"relative"}>
           <Container maxW={"7xl"} zIndex={10} position={"relative"}>
             <Stack direction={{ base: "column", lg: "row" }}>
+              {/* <ProjectBox />
               <ProjectBox />
-              <ProjectBox />
-              <ProjectBox />
+              <ProjectBox /> */}
               <Flex flex={1} />
             </Stack>
           </Container>
@@ -168,4 +157,4 @@ const CurrentProjects = () => {
     </>
   );
 };
-export default InfoSection;
+export default StatsGridWithImage;
