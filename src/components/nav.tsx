@@ -90,6 +90,7 @@ const WithAction = () => {
               bgColor="#2186B5"
               size={"sm"}
               mr={4}
+              display={{ base: "none", lg: "unset" }}
               // leftIcon={<AddIcon />}
             >
               Contact

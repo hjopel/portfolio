@@ -29,7 +29,7 @@ const StatsGridWithImage = () => {
         <Flex
           flex={1}
           zIndex={0}
-          display={{ base: "none", lg: "flex" }}
+          display="flex"
           // backgroundImage="planet3.jpg"
           backgroundSize={"cover"}
           backgroundPosition="center"

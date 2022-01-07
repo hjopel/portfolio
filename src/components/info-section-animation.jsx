@@ -1,4 +1,4 @@
-import { Flex, Box, Center, useColorMode, Image } from "@chakra-ui/react";
+import { Flex, Box, Center, useColorMode, Image, Text } from "@chakra-ui/react";
 import { shaderMaterial, OrbitControls } from "@react-three/drei";
 import { Canvas, extend, useFrame, useLoader } from "@react-three/fiber";
 // import glsl from "babel-plugin-glsl/macro";
@@ -240,25 +240,27 @@ const InfoSectionAnimation = () => {
   return (
     <>
       <Box w="100%" zIndex={-100}>
-        <Canvas
-          mode="concurrent"
-          camera={{ position: cameraPosition, fov: fov }}
-        >
-          <EffectComposer>
-            <Bloom
-              luminanceThreshold={0}
-              luminanceSmoothing={0.1}
-              height={300}
-            />
-          </EffectComposer>
-          <Suspense fallback={null}>
+        <Suspense fallback={<Spinner />}>
+          <Canvas
+            mode="concurrent"
+            camera={{ position: cameraPosition, fov: fov }}
+          >
+            <EffectComposer>
+              <Bloom
+                luminanceThreshold={0}
+                luminanceSmoothing={0.1}
+                height={300}
+              />
+            </EffectComposer>
             <LogoAnimation />
-          </Suspense>
-          {/* <OrbitControls enablePan={true} enableZoom={true} /> */}
-        </Canvas>
+            {/* <OrbitControls enablePan={true} enableZoom={true} /> */}
+          </Canvas>
+        </Suspense>
       </Box>
     </>
   );
 };
-
+const Spinner = () => {
+  return <Text>hiii</Text>;
+};
 export default InfoSectionAnimation;
