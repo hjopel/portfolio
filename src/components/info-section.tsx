@@ -13,7 +13,14 @@ import {
   useColorModeValue,
   HStack,
 } from "@chakra-ui/react";
-import InfoSectionAnimation from "./info-section-animation";
+import loadable from "@loadable/component";
+
+const InfoSectionAnimation = loadable(
+  () => import("./info-section-animation"),
+  {
+    fallback: <div>Loading...</div>,
+  }
+);
 import ProjectBox from "./projectCard";
 const StatsGridWithImage = () => {
   return (

@@ -4,8 +4,8 @@ module.exports = {
   images: {
     domains: ["images.unsplash.com"],
   },
-  experimental: {
-    reactRoot: true,
-    concurrentFeatures: true,
-  },
+  // experimental: {
+  //   reactRoot: true,
+  //   concurrentFeatures: true,
+  // },
 };

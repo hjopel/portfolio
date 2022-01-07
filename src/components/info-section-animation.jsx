@@ -240,11 +240,11 @@ const InfoSectionAnimation = () => {
   return (
     <>
       <Box w="100%" zIndex={-100}>
-        <Suspense fallback={<Spinner />}>
-          <Canvas
-            mode="concurrent"
-            camera={{ position: cameraPosition, fov: fov }}
-          >
+        <Canvas
+          mode="concurrent"
+          camera={{ position: cameraPosition, fov: fov }}
+        >
+          <Suspense fallback={null}>
             <EffectComposer>
               <Bloom
                 luminanceThreshold={0}
@@ -254,13 +254,11 @@ const InfoSectionAnimation = () => {
             </EffectComposer>
             <LogoAnimation />
             {/* <OrbitControls enablePan={true} enableZoom={true} /> */}
-          </Canvas>
-        </Suspense>
+          </Suspense>
+        </Canvas>
       </Box>
     </>
   );
 };
-const Spinner = () => {
-  return <Text>hiii</Text>;
-};
+
 export default InfoSectionAnimation;
