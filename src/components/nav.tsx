@@ -21,22 +21,7 @@ import {
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 
-const Links = ["About me", "Projects"];
-
-const NavLink = ({ children }: { children: ReactNode }) => (
-  <Link
-    px={2}
-    py={1}
-    rounded={"md"}
-    _hover={{
-      textDecoration: "none",
-      bg: useColorModeValue("gray.200", "gray.700"),
-    }}
-    href={"#"}
-  >
-    {children}
-  </Link>
-);
+const Links = [{ name: "Projects", href: "projects" }];
 
 const WithAction = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -46,6 +31,7 @@ const WithAction = () => {
       <Box
         zIndex={100}
         // bg={useColorModeValue("gray.100", "gray.900")}
+        className="secondary-reveal"
       >
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <IconButton
@@ -77,19 +63,23 @@ const WithAction = () => {
               display={{ base: "none", md: "flex" }}
             >
               {Links.map((link) => (
-                <NavLink key={link}>{link}</NavLink>
+                <Link key={link.href} href={link.href}>
+                  {link.name}
+                </Link>
               ))}
             </HStack>
           </HStack>
           <Flex alignItems={"center"} justifyContent="space-between">
-            <Button onClick={toggleColorMode}>
+            {/* <Button onClick={toggleColorMode}>
               {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-            </Button>
+            </Button> */}
             <Button
               variant={"solid"}
               bgColor="#2186B5"
               size={"sm"}
+              rounded="full"
               mr={4}
+              _hover={{ bg: "#3051E6" }}
               display={{ base: "none", lg: "unset" }}
               // leftIcon={<AddIcon />}
             >

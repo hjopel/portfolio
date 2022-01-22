@@ -14,3 +14,12 @@ a {
 * {
   box-sizing: border-box;
 }
+.secondary-reveal,
+.main-heading {
+  clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+  transition: all 1.5s;
+  /* transform: translateY(-3em); */
+}
+.image {
+  opacity: 0.1;
+}

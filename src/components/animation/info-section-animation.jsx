@@ -144,20 +144,17 @@ float snoise(vec3 v)
     highp float sn= mod(dt,3.14);
     return fract(sin(sn) * c);
 }
-    uniform sampler2D uTexture;
     uniform float uTime;
     uniform float uDistortionMultiplier;
     uniform vec2 mouse;
     varying vec2 vUv;
     void main() {  
         vUv = uv;
-         vec3 texture = texture2D(uTexture, vUv).rgb;
             vec3 distortion = vec3(position.x , position.y, 1.) * curlNoise(vec3(
             position.x  + uTime * 0.1, 
             position.y  + uTime*0.1,
             position.z + uTime*0.1)) * (uDistortionMultiplier * 1.);
             vec3 finalPos = position + distortion;
-        // if(texture.r < 0.1 && texture.g < 0.1 && texture.b < 0.1) finalPos = position;
         // finalPos.xy = smoothstep(position.xy, mouse, mouse * 1.5);
         gl_PointSize = 3.;
         
@@ -205,11 +202,11 @@ const LogoAnimation = () => {
     t1.fromTo(
       ref.current,
       { uDistortionMultiplier: 20 },
-      { delay: 0, duration: 4, uDistortionMultiplier: 100 }
+      { delay: 0, duration: 3, uDistortionMultiplier: 100 }
     );
     t1.to(ref.current, {
       delay: 0.5,
-      duration: 4,
+      duration: 2.5,
       uDistortionMultiplier: 0.02,
     });
   }, []);
@@ -239,24 +236,46 @@ const InfoSectionAnimation = () => {
   console.log(fov);
   return (
     <>
-      <Box w="100%" zIndex={-100}>
-        <Canvas
-          mode="concurrent"
-          camera={{ position: cameraPosition, fov: fov }}
+      <Flex
+        flex={1}
+        zIndex={0}
+        display="flex"
+        // backgroundImage="planet3.jpg"
+        backgroundSize={"cover"}
+        backgroundPosition="center"
+        backgroundRepeat="no-repeat"
+        position={"absolute"}
+        width={"70%"}
+        insetY={0}
+        right={0}
+      >
+        {/* <Box w="full" h="full"> */}
+        {/* </Box> */}
+        <Flex
+          bgGradient={"linear(to-r, gray.800 10% , transparent)"}
+          w={"full"}
+          h={"full"}
         >
-          <Suspense fallback={null}>
-            <EffectComposer>
-              <Bloom
-                luminanceThreshold={0}
-                luminanceSmoothing={0.1}
-                height={300}
-              />
-            </EffectComposer>
-            <LogoAnimation />
-            {/* <OrbitControls enablePan={true} enableZoom={true} /> */}
-          </Suspense>
-        </Canvas>
-      </Box>
+          <Box w="100%" zIndex={-100}>
+            <Canvas
+              mode="concurrent"
+              camera={{ position: cameraPosition, fov: fov }}
+            >
+              <Suspense fallback={null}>
+                <EffectComposer>
+                  <Bloom
+                    luminanceThreshold={0}
+                    luminanceSmoothing={0.1}
+                    height={300}
+                  />
+                </EffectComposer>
+                <LogoAnimation />
+                {/* <OrbitControls enablePan={true} enableZoom={true} /> */}
+              </Suspense>
+            </Canvas>
+          </Box>
+        </Flex>
+      </Flex>
     </>
   );
 };
